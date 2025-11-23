@@ -1,0 +1,1 @@
+# NOVO: Transforma 'src' em um pacote Python

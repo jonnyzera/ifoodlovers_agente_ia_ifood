@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFood Agente Operacional</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/script.js"></script>
+</head>
+<body>
+    <div class="app-layout">
+        
+        <!-- Sidebar de Contexto/Informações (Mais completo) -->
+        <div class="context-sidebar">
+            <h2>Detalhes do Atendimento</h2>
+            <div class="context-item">
+                <strong>ID do Colaborador</strong>
+                <span>AGT-45892</span>
+            </div>
+            <div class="context-item">
+                <strong>ID do Pedido em Análise</strong>
+                <span>#34529013-XYZ</span>
+            </div>
+            <div class="context-item">
+                <strong>Status Cliente</strong>
+                <span>Foodlover - Nível Prata</span>
+            </div>
+            <div class="context-item">
+                <strong>Contexto Atual</strong>
+                <span style="color: #EA1D2C; font-weight: 700;">Reembolso Financeiro</span>
+            </div>
+            
+            <h2 style="margin-top: 40px;">Histórico de Consultas</h2>
+            <div class="context-item" style="font-size: 0.9em;">
+                <p><strong>Última:</strong> Prazo de Estorno (14 dias)</p>
+                <p><strong>Anterior:</strong> Cancelamento por Falta de Item</p>
+            </div>
+            
+        </div>
+        
+        <!-- Área Principal de Chat -->
+        <div class="main-chat-area">
+            <div class="chat-container">
+                <header>
+                    <!-- Logo iFood com link absoluto -->
+                    <img src="https://parceiros.ifood.com.br/images/ifood-logo.svg" alt="Logotipo iFood" class="ifood-logo-img">
+                    <h1>Agente Suporte Interno</h1>
+                </header>
+                
+                <div id="chat-box" class="chat-box">
+                    <!-- Mensagens do chat serão injetadas aqui -->
+                </div>
+                
+                <form id="query-form" class="input-area">
+                    <input type="text" id="user-input" placeholder="Qual sua dúvida operacional? (Ex: Como funciona o estorno parcial?)" required>
+                    <button type="submit">Consultar</button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+</html>

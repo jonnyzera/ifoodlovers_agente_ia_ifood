@@ -1,6 +1,6 @@
-from config import configurar_settings, CAMINHO_BASE
-from data_loader import carregar_e_preparar_base
-from rag_core import criar_index, configurar_agente
+from src.config import configurar_settings, CAMINHO_BASE
+from src.data_loader import carregar_e_preparar_base
+from src.rag_core import criar_index, configurar_agente
 import sys # Para tratar erros
 
 def main():

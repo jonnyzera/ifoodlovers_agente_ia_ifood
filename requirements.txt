@@ -5,3 +5,4 @@ python-dotenv
 # Conectores consolidados para Gemini/Google GenAI
 llama-index-google-genai
 google-genai
+Flask
