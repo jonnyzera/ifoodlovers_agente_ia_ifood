@@ -1,0 +1,11 @@
+# Arquivos e diretórios de segurança e ambiente
+.env
+.env.dev
+.env.prod
+
+# Diretório do ambiente virtual Python
+venv/
+
+# Arquivos de cache e compilação do Python
+__pycache__/
+*.pyc
