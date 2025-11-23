@@ -3,7 +3,8 @@ import pandas as pd
 from dotenv import load_dotenv
 
 # Novos imports Gemini
-from llama_index import Gemini
+from llama_index.llms.google import Gemini
+from llama_index.embeddings.google import GoogleGenAIEmbedding 
 from llama_index.readers.schema import Document as LlamaIndexDocument
 from llama_index.core.settings import Settings
 
@@ -20,6 +21,7 @@ def configurar_settings():
 Setting.llm = Gemini(model="gemini-2.5-flash")
 
 # Modelo de Embedding (text-embedding-004) para a busca semântica
-Settings.embedding_model = Gemini(embedding_model="text-embedding-004")
+Settings.embed_model = GoogleGenAIEmbedding(model="text-embedding-004")
+
 print("Configuração do Agente: LLM e Embedding definidos para Gemini.")
 
