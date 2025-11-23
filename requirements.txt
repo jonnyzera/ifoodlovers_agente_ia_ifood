@@ -1,8 +1,8 @@
-# Dependências principais do LLamaIndex
+# Pacotes base
 llama-index
 pandas
 python-dotenv
-# Conectores para o Google Gemini
-llama-index-llms-google
-llama-index-embeddings-google
-google-genia
+# Conectores explícitos do Gemini (o nome mais universal e que o seu código espera)
+llama-index-llms-google-genai
+llama-index-embeddings-google-genai
+google-genai
