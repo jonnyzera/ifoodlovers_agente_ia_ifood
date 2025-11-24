@@ -17,15 +17,28 @@ O projeto utiliza **RAG (Retrieval-Augmented Generation)** com **LlamaIndex** e 
 ## 📂 Estrutura do projeto
 ```text
 foodlovers_agente_ia_ifood/
-├─ main.py                # Ponto de entrada do agente
-├─ config.py              # Configurações e variáveis de ambiente
-├─ data_loader.py         # Carregamento da base CSV
-├─ rag_core.py            # Lógica principal de RAG com LlamaIndex
-├─ requirements.txt       # Dependências do projeto
-├─ README.md              # Documentação do projeto
-├─ .env.dev               # Variáveis para ambiente de desenvolvimento
-├─ .env.prod              # Variáveis para ambiente de produção
-└─ base_conhecimento.csv  # Base de conhecimento (exemplo)
+│
+├─ app.py                                # Ponto de entrada principal do Agente Web (Flask)
+├─ main.py                               # Ponto de entrada do agente via Linha de Comando (CLI)
+├─ requirements.txt                      # Lista de dependências Python (LlamaIndex, Flask, etc.)
+├─ README.md                             # Documentação do projeto
+├─ vercel.json                           # Configuração de roteamento e build para o Deploy (Vercel)
+├─ runtime.txt                           # Define a versão Python para o Deploy (ex: python-3.11)
+├─ base_conhecimento_ifood_genai-exemplo.csv  # Base de conhecimento em dados (CSV)
+├─ .gitignore                            # Arquivo para ignorar arquivos não necessários no Git
+│
+├─ templates/                            # Arquivos HTML
+│  └─ index.html                         # Interface do chat (front-end)
+│
+├─ static/                               # Arquivos Estáticos
+│  ├─ style.css                          # Estilização visual da interface
+│  └─ script.js                          # Lógica JavaScript do chat (requisições à API)
+│
+└─ src/                                  # Lógica Central do Agente (Módulos)
+   ├─ __init__.py                        # Define 'src' como um pacote Python
+   ├─ config.py                          # Configuração de LLM/Embedding e variáveis de ambiente
+   ├─ data_loader.py                     # Lógica de carregamento e preparo da base CSV
+   └─ rag_core.py                        # Lógica de RAG: Criação do VectorStoreIndex e configuração do Query Engine
 ```
 
 ## 🛠️ Instalação
