@@ -4,8 +4,8 @@ from src.data_loader import carregar_e_preparar_base   # Importa do pacote src
 from src.rag_core import criar_index, configurar_agente # Importa do pacote src
 import sys
 
-app = Flask(__name__)
-agente = None 
+app = Flask(__name__, static_url_path='/static', static_folder='static')
+agente = None
 
 def inicializar_agente():
     """Inicializa o Agente RAG uma única vez ao iniciar o servidor."""
