@@ -6,9 +6,9 @@ O projeto utiliza **RAG (Retrieval-Augmented Generation)** com **LlamaIndex** e 
 ---
 
 ## 🚀 Funcionalidades
-- **Busca Semântica (💡):** Encontra a política exata na base de conhecimento (CSV) via similaridade de significado.
+- **Busca Semântica:** Encontra a política exata na base de conhecimento (CSV) via similaridade de significado.
 - **Geração Contextual:** Utiliza o Gemini para traduzir políticas internas ("Política 3.2", "Fluxo Financeiro") em respostas **diretas, práticas e não-técnicas** para o cliente.
-- **Fallback Seguro (🔒):** Configurado para **sempre** encaminhar o usuário ao suporte oficial em casos de status financeiro ou ambiguidade.
+- **Fallback Seguro:** Configurado para **sempre** encaminhar o usuário ao suporte oficial em casos de status financeiro ou ambiguidade.
 - **Arquitetura modular:** Código organizado e fácil de manter.
 - **Respostas fundamentadas:** Minimiza alucinações usando trechos relevantes do CSV.
 
