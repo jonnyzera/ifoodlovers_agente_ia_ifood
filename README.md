@@ -48,10 +48,16 @@ DB_URL="sqlite:///dev.db"
 
 ---
 # Exemplos de perguntas:
+- **O cliente quer reembolso, mas o pedido já saiu para entrega. Ainda é permitido?**
 - **Posso cancelar meu pedido?**
 - **Qual é a política de reembolso?**
-
-
+-  **Quando o agente deve gerar orientação de ticket?**
+- **Há situações em que o reembolso não se aplica?**
+- **O cliente pode pedir reembolso após o pedido sair para entrega?**
+- **O que fazer se o restaurante não tiver o item pedido?**
+- **Cancelamento solicitado após despacho?**
+- **Estorno é automático em qual situação?**
+- **O cliente pode ser cobrado duas vezes?**
 
 
 
