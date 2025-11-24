@@ -3,6 +3,7 @@ llama-index
 pandas
 python-dotenv
 # Conectores consolidados para Gemini/Google GenAI
-llama-index-google-genai
+llama-index-llms-google-genai
+llama-index-embeddings-google-genai
 google-genai
 Flask

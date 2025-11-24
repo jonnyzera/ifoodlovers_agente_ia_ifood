@@ -1,5 +1,5 @@
 import pandas as pd
-from llama_index.core.schema import Document as LlamaIndexDocument # CORREÇÃO: Nova localização da classe Document
+from llama_index.core.schema import Document as LlamaIndexDocument # Nova localização da classe Document
 import os
 
 def carregar_e_preparar_base(caminho_csv):
@@ -20,7 +20,7 @@ def carregar_e_preparar_base(caminho_csv):
     documentos_llama_index = []
     for _, row in df.iterrows():
         # Cria o contexto de texto
-        # CORREÇÃO: Alterado 'fonte_politica' para 'fonte' para corresponder ao CSV de exemplo
+        # Alterado 'fonte_politica' para 'fonte' para corresponder ao CSV de exemplo
         texto_completo = (
             f"Categoria: {row['categoria']}. "
             f"Pergunta relacionada: {row['pergunta']}. "

@@ -1,209 +1,262 @@
-    /* ==================== CSS EMBUTIDO (ESTILIZAÇÃO PROFISSIONAL) ==================== */
+/* ==================== CSS EMBUTIDO (ESTILIZAÇÃO PROFISSIONAL) ==================== */
         
-        /* Uso de uma fonte limpa e profissional */
-        body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f8f8; /* Fundo mais suave */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            color: #333;
-        }
+/* Uso de uma fonte limpa e profissional */
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f8f8; /* Fundo mais suave */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: #333;
+}
 
-        /* Container principal para simular uma aplicação completa */
-        .app-layout {
-            display: flex;
-            width: 95%;
-            max-width: 1200px; /* Largura maior para layout mais completo */
-            min-height: 80vh;
-            background-color: #fff;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        
-        /* Área de Sidebar/Contexto */
-        .context-sidebar {
-            width: 300px;
-            background-color: #fafafa;
-            padding: 30px 20px;
-            border-right: 1px solid #eee;
-            flex-shrink: 0;
-        }
-        
-        .context-sidebar h2 {
-            color: #EA1D2C;
-            font-size: 1.2em;
-            margin-top: 0;
-            border-bottom: 2px solid #EA1D2C;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .context-item {
-            margin-bottom: 15px;
-            padding: 10px;
-            /* NOVO: Borda esquerda em vermelho iFood */
-            border-left: 3px solid #EA1D2C; 
-            background-color: #fff;
-            border-radius: 4px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-        
-        .context-item strong {
-            display: block;
-            font-size: 0.9em;
-            color: #555;
-            margin-bottom: 3px;
-        }
-        
-        .context-item span {
-            font-size: 1em;
-            font-weight: 600;
-        }
+/* Container principal para simular uma aplicação completa */
+.app-layout {
+    display: flex;
+    width: 95%;
+    max-width: 1200px; /* Largura maior para layout mais completo */
+    min-height: 80vh;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
 
-        /* Área Principal do Chat */
-        .main-chat-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
+/* Área de Sidebar/Contexto */
+.context-sidebar {
+    width: 300px;
+    background-color: #fafafa;
+    padding: 30px 20px;
+    border-right: 1px solid #eee;
+    flex-shrink: 0;
+}
 
-        .chat-container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
+.context-sidebar h2 {
+    color: #EA1D2C;
+    font-size: 1.2em;
+    margin-top: 0;
+    border-bottom: 2px solid #EA1D2C;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
 
-        /* Fundo Branco para contraste com a Logo */
-        header {
-            background-color: #FFFFFF; 
-            color: #333;
-            padding: 20px 30px; 
-            display: flex; 
-            align-items: center; 
-            text-align: left;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
-            /* NOVO: Linha de separação em vermelho iFood */
-            border-bottom: 2px solid #EA1D2C; 
-        }
+.context-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    /* NOVO: Borda esquerda em vermelho iFood */
+    border-left: 3px solid #EA1D2C; 
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
 
-        .ifood-logo-img { 
-            width: 65px; 
-            height: auto;
-            margin-right: 20px; 
-        }
+.context-item strong {
+    display: block;
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 3px;
+}
 
-        header h1 {
-            margin: 0; 
-            font-size: 1.5em; 
-            font-weight: 700;
-            color: #EA1D2C;
-        }
+.context-item span {
+    font-size: 1em;
+    font-weight: 600;
+}
 
-        .chat-box {
-            flex-grow: 1;
-            padding: 20px 30px;
-            overflow-y: auto;
-            background-color: #fff;
-        }
+/* --- ESTILOS DINÂMICOS PARA O HISTÓRICO DE CONSULTAS --- */
 
-        .message {
-            margin-bottom: 20px;
-            max-width: 80%;
-            padding: 15px;
-            border-radius: 8px;
-            line-height: 1.5;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-        
-        .user-message {
-            /* NOVO: Fundo em rosa/vermelho muito suave */
-            background-color: #fff0f0; 
-            margin-left: auto;
-            border-top-right-radius: 2px;
-        }
+/* Remove a margem extra da div container, caso haja, para melhor controle dos itens internos */
+#historico-consultas.context-item {
+    padding: 0;
+    margin-top: 10px;
+    border-left: none; /* Remove a borda esquerda do container, que agora será nos itens */
+    background-color: transparent;
+    box-shadow: none;
+}
 
-        .agent-message {
-            background-color: #f5f5f5;
-            margin-right: auto;
-            border-top-left-radius: 2px;
-        }
+/* 1. Estilo do "Quadrado" (history-item) para separação visual */
+#historico-consultas .history-item {
+    background-color: #fff; /* Fundo branco dentro do sidebar */
+    border: 1px solid #ddd;   
+    border-radius: 6px;       
+    padding: 10px;            
+    margin-bottom: 10px;      /* Espaçamento entre os itens */
+    position: relative;       
+    line-height: 1.4;
+    display: block;
+    /* Replicando a borda esquerda do context-item para o box individual */
+    border-left: 3px solid #EA1D2C; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
 
-        .sources {
-            font-size: 0.75em;
-            color: #777;
-            margin-top: 10px;
-            padding-top: 8px;
-            border-top: 1px dashed #ddd;
-            white-space: pre-wrap; 
-            font-style: italic;
-        }
+/* 2. Formatação do Cabeçalho e Posição do Horário */
+.history-header {
+    display: flex;
+    justify-content: space-between; /* Empurra o horário para o canto */
+    align-items: center;
+    margin-bottom: 5px; 
+    padding-bottom: 5px; /* Linha sutil de separação */
+    border-bottom: 1px solid #eee;
+}
 
-        .input-area {
-            display: flex;
-            padding: 20px 30px;
-            border-top: 1px solid #eee;
-            background-color: #fafafa;
-            align-items: center;
-        }
+/* 3. Estilo e Tamanho do Horário (history-time) - Pequeno e discreto */
+.history-time {
+    font-size: 0.75em; 
+    color: #999;       
+    font-weight: 400;
+}
 
-        #user-input {
-            flex-grow: 1;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-right: 15px;
-            font-size: 1em;
-            transition: border-color 0.2s;
-        }
-        
-        #user-input:focus {
-            border-color: #EA1D2C;
-            outline: none;
-        }
+/* 4. Estilo da Categoria */
+.history-category {
+    display: block;
+    font-size: 0.8em;
+    color: #EA1D2C;
+    margin-top: 5px;
+    font-style: normal; 
+    font-weight: 600;
+}
 
-        button {
-            background-color: #EA1D2C;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: 600;
-            transition: background-color 0.2s, transform 0.1s;
-        }
+/* Área Principal do Chat */
+.main-chat-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
 
-        button:hover {
-            background-color: #d81c29;
-        }
-        
-        button:active {
-            transform: scale(0.98);
-        }
+.chat-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
 
-        /* Media Query para responsividade (Melhora a tela em mobile) */
-        @media (max-width: 768px) {
-            .app-layout {
-                flex-direction: column;
-                min-height: 100vh;
-                width: 100%;
-                border-radius: 0;
-            }
-            .context-sidebar {
-                width: 100%;
-                border-right: none;
-                border-bottom: 1px solid #eee;
-                padding: 15px;
-            }
-            .main-chat-area {
-                height: 100%;
-            }
-            .chat-box, .input-area {
-                padding: 15px;
-            }
-        }
+/* Fundo Branco para contraste com a Logo */
+header {
+    background-color: #FFFFFF; 
+    color: #333;
+    padding: 20px 30px; 
+    display: flex; 
+    align-items: center; 
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); 
+    /* Linha de separação em vermelho iFood */
+    border-bottom: 2px solid #EA1D2C; 
+}
+
+.ifood-logo-img { 
+    width: 65px; 
+    height: auto;
+    margin-right: 20px; 
+}
+
+header h1 {
+    margin: 0; 
+    font-size: 1.5em; 
+    font-weight: 700;
+    color: #EA1D2C;
+}
+
+.chat-box {
+    flex-grow: 1;
+    padding: 20px 30px;
+    overflow-y: auto;
+    background-color: #fff;
+}
+
+.message {
+    margin-bottom: 20px;
+    max-width: 80%;
+    padding: 15px;
+    border-radius: 8px;
+    line-height: 1.5;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.user-message {
+    /* Fundo em rosa/vermelho muito suave */
+    background-color: #fff0f0; 
+    margin-left: auto;
+    border-top-right-radius: 2px;
+}
+
+.agent-message {
+    background-color: #f5f5f5;
+    margin-right: auto;
+    border-top-left-radius: 2px;
+}
+
+.sources {
+    font-size: 0.75em;
+    color: #777;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed #ddd;
+    white-space: pre-wrap; 
+    font-style: italic;
+}
+
+.input-area {
+    display: flex;
+    padding: 20px 30px;
+    border-top: 1px solid #eee;
+    background-color: #fafafa;
+    align-items: center;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-right: 15px;
+    font-size: 1em;
+    transition: border-color 0.2s;
+}
+
+#user-input:focus {
+    border-color: #EA1D2C;
+    outline: none;
+}
+
+button {
+    background-color: #EA1D2C;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+    background-color: #d81c29;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Media Query para responsividade (Melhora a tela em mobile) */
+@media (max-width: 768px) {
+    .app-layout {
+        flex-direction: column;
+        min-height: 100vh;
+        width: 100%;
+        border-radius: 0;
+    }
+    .context-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #eee;
+        padding: 15px;
+    }
+    .main-chat-area {
+        height: 100%;
+    }
+    .chat-box, .input-area {
+        padding: 15px;
+    }
+}
