@@ -1,4 +1,4 @@
-import os
+import os # Importar 'os' é essencial para manipular caminhos de arquivo
 import pandas as pd
 from dotenv import load_dotenv
 
@@ -12,7 +12,8 @@ from llama_index.core.settings import Settings
 load_dotenv()
 
 # -- VARIÁVEL DO LLAMAINDEX --
-CAMINHO_BASE = "base_conhecimento_ifood_genai-exemplo.csv"
+# CORRIGIDO: O arquivo CSV está um nível acima (..) do diretório 'src' onde este script reside.
+CAMINHO_BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', "base_conhecimento_ifood_genai-exemplo.csv")
 
 # -- CONFIGURAÇÃO DO LLAMAINDEX --
 def configurar_settings():
