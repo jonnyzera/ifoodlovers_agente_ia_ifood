@@ -39,7 +39,6 @@ cd foodlovers_agente_ia_ifood
 
 ```APP_ENV=dev
 GEMINI_API_KEY="sua_chave_aqui"
-DB_URL="sqlite:///dev.db"
 ```
 
 ---
