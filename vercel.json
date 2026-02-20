@@ -4,16 +4,20 @@
       "src": "app.py",
       "use": "@vercel/python",
       "config": {
-        "runtime": "python3.11"
+        "runtime": "python3.11" 
       }
     }
   ],
   "installCommand": "pip install --upgrade pip && pip install -r requirements.txt",
   
   "routes": [
-    
-    { "src": "/assets/(.*)", "dest": "/static/$1" }, 
-    
-    { "src": "/(.*)", "dest": "app.py" }
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
+    }
   ]
 }

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
-from src.config import configurar_settings, CAMINHO_BASE # Importa do pacote src
-from src.data_loader import carregar_e_preparar_base   # Importa do pacote src
-from src.rag_core import criar_index, configurar_agente # Importa do pacote src
+from src.config import configurar_settings, CAMINHO_BASE 
+from src.data_loader import carregar_e_preparar_base   
+from src.rag_core import criar_index, configurar_agente 
 import sys
 
 app = Flask(__name__)
