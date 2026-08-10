@@ -1,19 +1,16 @@
-// ==================== JAVASCRIPT PARA INTERATIVIDADE (LÓGICA DO CHAT) ====================
+// ==================== JAVASCRIPT OTIMIZADO PARA INTERATIVIDADE ====================
 document.addEventListener('DOMContentLoaded', () => {
     const chatBox = document.getElementById('chat-box');
     const queryForm = document.getElementById('query-form');
     const userInput = document.getElementById('user-input');
 
-    // 🌟 VARIÁVEL GLOBAL: Array para armazenar o histórico de consultas (Pergunta, Categoria e HORA) 🌟
     const queryHistory = []; 
-    // ELEMENTOS DO SIDEBAR: Pegar referências pelos IDs
     const contextoAtualSpan = document.getElementById('contexto-atual');
     const historicoConsultasDiv = document.getElementById('historico-consultas');
     
     // Mensagem de boas-vindas inicial do Agente
     appendMessage('agent', 'Olá! Sou seu Agente IA de Suporte Operacional. Estou pronto para consultas sobre políticas e fluxos internos.', []);
     
-    // Inicializa o sidebar com a mensagem de 'Aguardando Consulta'
     updateSidebar(); 
 
     queryForm.addEventListener('submit', async (e) => {
@@ -21,15 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const pergunta = userInput.value.trim();
         if (pergunta === '') return;
 
-        // 1. Mostrar a pergunta do usuário
         appendMessage('user', pergunta, []);
 
-        // 2. Limpar input e desabilitar
         userInput.value = '';
         userInput.disabled = true;
-        queryForm.querySelector('button').disabled = true;
+        const submitBtn = queryForm.querySelector('button');
+        if (submitBtn) submitBtn.disabled = true;
 
-        // 3. Chamar a API usando Fetch
         try {
             const response = await fetch('/query', {
                 method: 'POST',
@@ -46,37 +41,31 @@ document.addEventListener('DOMContentLoaded', () => {
             if (resposta) {
                 const categoriaMaisRelevante = getMostRelevantCategory(fontes);
 
-                // 🌟 MUDANÇA: Captura e armazena o horário da consulta 🌟
                 queryHistory.unshift({ 
                     pergunta: pergunta, 
                     categoria: categoriaMaisRelevante,
                     timestamp: new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})
                 });
                 
-                // Mantém apenas as N últimas consultas no histórico
                 if (queryHistory.length > 3) {
                     queryHistory.pop();
                 }
                 
-                // Atualiza os elementos do sidebar
                 updateSidebar(categoriaMaisRelevante);
             }
 
-            // 4. Mostrar a resposta do agente
             appendMessage('agent', resposta, fontes);
 
         } catch (error) {
             console.error('Erro na comunicação com o backend:', error);
             appendMessage('agent', 'Desculpe, ocorreu um erro de comunicação com o servidor. Verifique o console do Flask.', []);
         } finally {
-            // 5. Reabilitar input
             userInput.disabled = false;
-            queryForm.querySelector('button').disabled = false;
+            if (submitBtn) submitBtn.disabled = false;
             userInput.focus();
         }
     });
     
-    // FUNÇÃO: Determina a categoria mais relevante (sem alterações)
     function getMostRelevantCategory(sources) {
         if (!sources || sources.length === 0) return 'Geral / Indefinido';
         
@@ -98,61 +87,74 @@ document.addEventListener('DOMContentLoaded', () => {
         return mostRelevant.charAt(0).toUpperCase() + mostRelevant.slice(1) || 'Geral / Indefinido';
     }
 
-    // 🌟 FUNÇÃO MODIFICADA: Renderiza o HTML com o horário e classes para o "quadrado" 🌟
     function updateSidebar(currentContext = 'Aguardando Consulta') {
-        contextoAtualSpan.textContent = currentContext.toUpperCase();
+        if (contextoAtualSpan) {
+            contextoAtualSpan.textContent = currentContext.toUpperCase();
+        }
         
-        historicoConsultasDiv.innerHTML = ''; // Limpa o conteúdo
+        if (!historicoConsultasDiv) return;
+        historicoConsultasDiv.innerHTML = ''; 
         
         if (queryHistory.length === 0) {
-            historicoConsultasDiv.innerHTML = '<p>Nenhuma consulta registrada.</p>';
+            historicoConsultasDiv.innerHTML = '<p style="color: #717171;">Nenhuma consulta registrada.</p>';
             return;
         }
         
         queryHistory.forEach((item, index) => {
             const label = index === 0 ? 'Atual' : (index === 1 ? 'Última' : 'Anterior');
             
-            const pElement = document.createElement('p');
-            // Adiciona classe para estilização do "quadrado"
-            pElement.classList.add('history-item'); 
+            const divElement = document.createElement('div');
+            divElement.classList.add('context-item'); 
+            divElement.style.marginBottom = '10px';
             
-            // Renderiza o HTML com a hora capturada (item.timestamp) e formatação
-            pElement.innerHTML = `
-                <div class="history-header">
-                    <strong>${label}</strong>
-                    <span class="history-time">${item.timestamp}</span>
+            divElement.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <strong style="font-size: 0.75rem; color: #EA1D2C;">${label}</strong>
+                    <span style="font-size: 0.75rem; color: #717171;">${item.timestamp}</span>
                 </div>
-                <div class="history-content">
-                    ${item.pergunta} 
-                    <em class="history-category">(Cat: ${item.categoria})</em>
+                <div>
+                    <span style="font-size: 0.9rem; color: #1f1f1f; display: block; margin-bottom: 2px;">${item.pergunta}</span>
+                    <em style="font-size: 0.75rem; color: #717171;">(Cat: ${item.categoria})</em>
                 </div>
             `;
             
-            historicoConsultasDiv.appendChild(pElement);
+            historicoConsultasDiv.appendChild(divElement);
         });
     }
 
-    // Função de exibição de mensagem (sem alterações, mas incluída para completar o arquivo)
     function appendMessage(sender, text, sources) {
+        if (!chatBox) return;
+
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message');
-        messageDiv.classList.add(sender === 'user' ? 'user-message' : 'agent-message');
-        messageDiv.innerHTML = `<p>${text.replace(/\n/g, '<br>')}</p>`;
+        
+        if (sender === 'user') {
+            messageDiv.style.cssText = "margin: 12px 0; padding: 12px 16px; background-color: #EA1D2C; color: white; border-radius: 8px 8px 0 8px; margin-left: auto; max-width: 80%; word-break: break-word;";
+        } else {
+            messageDiv.style.cssText = "margin: 12px 0; padding: 12px 16px; background-color: #ffffff; color: #333333; border: 1px solid #e5e5e5; border-radius: 8px 8px 8px 0; margin-right: auto; max-width: 80%; word-break: break-word;";
+        }
+
+        // Formatação limpa: converte quebras de linha e remove/transforma os ** em negrito HTML real
+        let formattedText = text ? text.replace(/\n/g, '<br>') : "Sem resposta do servidor.";
+        formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #1f1f1f;">$1</strong>');
+
+        messageDiv.innerHTML = `<p style="margin: 0; line-height: 1.4;">${formattedText}</p>`;
 
         if (sender === 'agent' && sources && sources.length > 0) {
             const sourcesDiv = document.createElement('div');
-            sourcesDiv.classList.add('sources');
-            let sourcesText = '--- FONTES UTILIZADAS ---';
+            sourcesDiv.style.cssText = "margin-top: 8px; font-size: 0.75rem; color: #717171; border-top: 1px solid #eee; padding-top: 6px;";
+            
+            let sourcesText = '<strong>Fontes utilizadas:</strong>';
             const uniqueSources = {};
             
             sources.forEach(s => {
                 const key = `${s.fonte} (Categoria: ${s.categoria})`;
                 if (!uniqueSources[key]) {
                     uniqueSources[key] = true;
-                    sourcesText += `\n- Fonte: ${s.fonte} (Cat: ${s.categoria})`;
+                    sourcesText += `<br>- ${s.fonte} (Cat: ${s.categoria})`;
                 }
             });
-            sourcesDiv.textContent = sourcesText.trim();
+            sourcesDiv.innerHTML = sourcesText;
             messageDiv.appendChild(sourcesDiv);
         }
 
