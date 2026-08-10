@@ -3,11 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iFood Agente Operacional</title>
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='ifood-logo.svg') }}">    
-    
+    <title>iFood | Agente Operacional</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='ifood-logo.svg') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <style>
+        /* Estilos complementares padrão iFood */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background-color: #f4f4f4;
+            color: #333333;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .app-layout {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+        .context-sidebar {
+            width: 320px;
+            background-color: #ffffff;
+            border-right: 1px solid #e5e5e5;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.02);
+            overflow-y: auto;
+        }
+        .context-sidebar h2 {
+            font-size: 1rem;
+            color: #333333;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .context-item {
+            background: #fafafa;
+            border: 1px solid #eeeeee;
+            padding: 12px 14px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .context-item strong {
+            display: block;
+            font-size: 0.75rem;
+            color: #717171;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+        .context-item span {
+            font-size: 0.95rem;
+            color: #1f1f1f;
+            font-weight: 500;
+        }
+        .main-chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+            background: #ffffff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.04);
+        }
+        .chat-container header {
+            padding: 20px 24px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .ifood-logo-img {
+            height: 32px;
+            width: auto;
+        }
+        .chat-container header h1 {
+            font-size: 1.15rem;
+            color: #1f1f1f;
+            font-weight: 600;
+        }
+        .chat-box {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            background-color: #fafafa;
+        }
+        .input-area {
+            padding: 20px 24px;
+            background: #ffffff;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            gap: 12px;
+        }
+        .input-area input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 1px solid #dcdcdc;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-area input:focus {
+            border-color: #EA1D2C;
+        }
+        .input-area button {
+            background-color: #EA1D2C;
+            color: #ffffff;
+            border: none;
+            padding: 0 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .input-area button:hover {
+            background-color: #d11725;
+        }
+    </style>
 </head>
 <body>
     <div class="app-layout">
@@ -31,11 +162,10 @@
                 <span id="contexto-atual" style="color: #EA1D2C; font-weight: 700;">AGUARDANDO CONSULTA</span>
             </div>
             
-            <h2 style="margin-top: 40px;">Histórico de Consultas</h2>
+            <h2 style="margin-top: 30px;">Histórico de Consultas</h2>
             <div id="historico-consultas" class="context-item" style="font-size: 0.9em;">
-                <p>Nenhuma consulta registrada.</p>
+                <p style="color: #717171;">Nenhuma consulta registrada.</p>
             </div>
-            
         </div>
         
         <div class="main-chat-area">
@@ -46,7 +176,8 @@
                 </header>
                 
                 <div id="chat-box" class="chat-box">
-                    </div>
+                    <!-- Mensagens do chat entram aqui via JS -->
+                </div>
                 
                 <form id="query-form" class="input-area">
                     <input type="text" id="user-input" placeholder="Qual sua dúvida operacional? (Ex: Como funciona o estorno parcial?)" required>
@@ -56,6 +187,5 @@
         </div>
         
     </div>
-
 </body>
 </html>
