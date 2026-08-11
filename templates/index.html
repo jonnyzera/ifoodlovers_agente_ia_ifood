@@ -4,188 +4,413 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iFood | Agente Operacional</title>
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='ifood-logo.svg') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
     <style>
-        /* Estilos complementares padrão iFood */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
+        :root {
+            --bg-body: #f4f4f6; --bg-sidebar: #ffffff; --bg-chat: #ffffff;
+            --bg-box: #fafafa; --msg-user: #EA1D2C; --msg-user-text: #ffffff;
+            --msg-ai: #ffffff; --text-main: #1f1f1f; --text-sec: #717171;
+            --text-muted: #8e8e93; --border: #e5e5e5; --card-bg: #fdfdfd;
+            --card-border: #eeeeee; --hover: #f0f0f2; --red: #EA1D2C;
+            --red-hover: #d11725; --green: #2e7d32; --green-bg: #e8f5e9;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
-        body {
-            background-color: #f4f4f4;
-            color: #333333;
-            height: 100vh;
-            overflow: hidden;
+        body.dark-mode {
+            --bg-body: #0d0d0e; --bg-sidebar: #171719; --bg-chat: #171719;
+            --bg-box: #121214; --msg-ai: #222226; --text-main: #f0f0f2;
+            --text-sec: #a1a1aa; --text-muted: #a1a1aa; --border: #27272a;
+            --card-bg: #1e1e22; --card-border: #2e2e33; --hover: #2a2a30;
+            --green-bg: #1b3320;
         }
-        .app-layout {
-            display: flex;
-            height: 100vh;
-            width: 100vw;
-        }
-        .context-sidebar {
-            width: 320px;
-            background-color: #ffffff;
-            border-right: 1px solid #e5e5e5;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 2px 0 8px rgba(0,0,0,0.02);
-            overflow-y: auto;
-        }
-        .context-sidebar h2 {
-            font-size: 1rem;
-            color: #333333;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .context-item {
-            background: #fafafa;
-            border: 1px solid #eeeeee;
-            padding: 12px 14px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-        .context-item strong {
-            display: block;
-            font-size: 0.75rem;
-            color: #717171;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-        }
-        .context-item span {
-            font-size: 0.95rem;
-            color: #1f1f1f;
-            font-weight: 500;
-        }
-        .main-chat-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #f8f9fa;
-        }
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            max-width: 1000px;
-            margin: 0 auto;
-            width: 100%;
-            background: #ffffff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.04);
-        }
-        .chat-container header {
-            padding: 20px 24px;
-            background-color: #ffffff;
-            border-bottom: 1px solid #e5e5e5;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .ifood-logo-img {
-            height: 32px;
-            width: auto;
-        }
-        .chat-container header h1 {
-            font-size: 1.15rem;
-            color: #1f1f1f;
-            font-weight: 600;
-        }
-        .chat-box {
-            flex: 1;
-            padding: 24px;
-            overflow-y: auto;
-            background-color: #fafafa;
-        }
-        .input-area {
-            padding: 20px 24px;
-            background: #ffffff;
-            border-top: 1px solid #e5e5e5;
-            display: flex;
-            gap: 12px;
-        }
-        .input-area input {
-            flex: 1;
-            padding: 14px 16px;
-            border: 1px solid #dcdcdc;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .input-area input:focus {
-            border-color: #EA1D2C;
-        }
-        .input-area button {
-            background-color: #EA1D2C;
-            color: #ffffff;
-            border: none;
-            padding: 0 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .input-area button:hover {
-            background-color: #d11725;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg-body); color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; }
+        .layout { display: flex; height: 100vh; width: 100vw; position: relative; }
+        
+        /* Sidebar Styles */
+        aside { width: 340px; background: var(--bg-sidebar); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; z-index: 20; transition: transform 0.3s; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        aside h2 { font-size: 0.8rem; color: var(--text-sec); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+        .card { background: var(--card-bg); border: 1px solid var(--card-border); padding: 12px 14px; border-radius: 10px; margin-bottom: 10px; }
+        .card strong { display: block; font-size: 0.7rem; color: var(--text-sec); margin-bottom: 4px; text-transform: uppercase; }
+        .card span { font-size: 0.9rem; font-weight: 600; }
+        .pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: rgba(234,29,44,0.1); color: var(--red); }
+        
+        .history-title { display: flex; justify-content: space-between; align-items: center; margin-top: 24px; margin-bottom: 12px; }
+        .btn-clear { background: none; border: none; color: var(--text-muted); font-size: 0.75rem; cursor: pointer; }
+        .btn-clear:hover { color: var(--red); }
+        .history-list { display: flex; flex-direction: column; gap: 8px; overflow-y: auto; flex: 1; }
+        .history-item { background: var(--card-bg); border: 1px solid var(--card-border); padding: 12px; border-radius: 10px; cursor: pointer; text-align: left; width: 100%; transition: 0.2s; color: var(--text-main); }
+        .history-item:hover, .history-item.active { border-color: var(--red); background: var(--hover); }
+        .history-item-title { font-size: 0.85rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); }
+        .history-item-time { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
+        .empty-history { color: var(--text-muted); font-size: 0.8rem; text-align: center; padding: 20px; font-style: italic; }
+
+        /* Main Area Styles */
+        main { flex: 1; display: flex; flex-direction: column; background: var(--bg-body); height: 100%; overflow: hidden; }
+        .chat-wrapper { display: flex; flex-direction: column; height: 100%; max-width: 1100px; margin: 0 auto; width: 100%; background: var(--bg-chat); box-shadow: var(--shadow); }
+        
+        header { padding: 16px 24px; background: var(--bg-sidebar); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .header-left { display: flex; align-items: center; gap: 14px; }
+        .menu-toggle { display: none; background: none; border: none; color: var(--text-main); cursor: pointer; padding: 6px; }
+        .logo { height: 26px; }
+        h1 { font-size: 1.1rem; font-weight: 700; }
+        .badge { display: inline-flex; align-items: center; gap: 6px; background: var(--green-bg); color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(46,125,50,0.2); }
+        .dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; }
+        
+        .theme-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-main); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .theme-btn:hover { border-color: var(--red); }
+        .theme-btn svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* Chat Body */
+        .chat-box { flex: 1; padding: 24px; overflow-y: auto; background: var(--bg-box); display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+        .msg-row { display: flex; width: 100%; }
+        .msg-row.user { justify-content: flex-end; }
+        .msg-row.assistant { justify-content: flex-start; }
+        .bubble { max-width: 82%; padding: 14px 18px; border-radius: 16px; font-size: 0.95rem; line-height: 1.5; box-shadow: var(--shadow); word-break: break-word; }
+        .msg-row.user .bubble { background: var(--msg-user); color: var(--msg-user-text); border-bottom-right-radius: 4px; }
+        .msg-row.assistant .bubble { background: var(--msg-ai); color: var(--text-main); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+        .msg-time { font-size: 0.68rem; margin-top: 6px; opacity: 0.7; text-align: right; display: block; }
+        .ai-label { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 700; color: var(--red); margin-bottom: 6px; }
+
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .chip { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-main); padding: 8px 12px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-weight: 500; transition: 0.2s; }
+        .chip:hover { border-color: var(--red); color: var(--red); background: var(--hover); }
+
+        .typing { display: inline-flex; align-items: center; gap: 5px; padding: 12px 18px; background: var(--msg-ai); border: 1px solid var(--border); border-radius: 16px; border-bottom-left-radius: 4px; }
+        .typing-dot { width: 7px; height: 7px; background: var(--text-sec); border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1.1); opacity: 1; } }
+
+        /* Input Footer */
+        form { padding: 16px 24px; background: var(--bg-sidebar); border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+        .input-group { display: flex; gap: 10px; align-items: center; }
+        input[type="text"] { flex: 1; padding: 14px 18px; border: 1px solid var(--border); border-radius: 10px; font-size: 0.95rem; background: var(--bg-box); color: var(--text-main); outline: none; transition: 0.2s; }
+        input[type="text"]:focus { border-color: var(--red); }
+        
+        .attach-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-sec); padding: 12px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .attach-btn:hover { border-color: var(--red); color: var(--red); background: var(--hover); }
+        
+        button[type="submit"] { background: var(--red); color: #fff; border: none; padding: 0 24px; height: 51px; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        button[type="submit"]:hover { background: var(--red-hover); }
+        
+        .attachment-preview-bar { display: none; align-items: center; gap: 10px; padding: 6px 12px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; font-size: 0.8rem; }
+        .attachment-preview-bar img { width: 32px; height: 32px; object-fit: cover; border-radius: 4px; }
+        .remove-attachment { background: none; border: none; color: var(--red); cursor: pointer; font-weight: bold; margin-left: auto; }
+
+        .chat-img { max-width: 240px; max-height: 180px; border-radius: 8px; margin-top: 8px; display: block; object-fit: cover; border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s; }
+        .chat-img:hover { transform: scale(1.02); }
+
+        .input-hint { font-size: 0.72rem; color: var(--text-muted); display: flex; justify-content: space-between; }
+        
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 15; backdrop-filter: blur(2px); }
+        .content p { margin-bottom: 8px; }
+        .content p:last-child { margin-bottom: 0; }
+        .tag { background: rgba(234,29,44,0.1); color: var(--red); padding: 2px 6px; border-radius: 4px; font-weight: 600; font-size: 0.85em; }
+
+        @media (max-width: 868px) {
+            .menu-toggle { display: block; }
+            aside { position: fixed; inset: 0 auto 0 0; transform: translateX(-100%); }
+            aside.open { transform: translateX(0); }
+            .overlay.active { display: block; }
         }
     </style>
 </head>
 <body>
-    <div class="app-layout">
+    <div class="layout">
+        <div id="overlay" class="overlay"></div>
         
-        <div class="context-sidebar">
-            <h2>Detalhes do Atendimento</h2>
-            <div class="context-item">
-                <strong>ID do Colaborador</strong>
-                <span id="colaborador-id">AGT-45892</span>
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <h2>Atendimento</h2>
+                <button id="close-sidebar" class="menu-toggle">✕</button>
             </div>
-            <div class="context-item">
-                <strong>ID do Pedido em Análise</strong>
-                <span id="pedido-id">#34529013-XYZ</span>
+            <div class="card">
+                <strong>ID Colaborador</strong>
+                <span>AGT-45892</span>
             </div>
-            <div class="context-item">
-                <strong>Status Cliente</strong>
-                <span id="cliente-status">Foodlover - Nível Prata</span>
+            <div class="card">
+                <strong>Pedido Atual</strong>
+                <span>#34529013-XYZ</span>
             </div>
-            <div class="context-item">
-                <strong>Contexto Atual</strong>
-                <span id="contexto-atual" style="color: #EA1D2C; font-weight: 700;">AGUARDANDO CONSULTA</span>
+            <div class="card">
+                <strong>Cliente</strong>
+                <span>Foodlover • Prata</span>
+            </div>
+            <div class="card">
+                <strong>Status</strong>
+                <span class="pill">● EM ANDAMENTO</span>
             </div>
             
-            <h2 style="margin-top: 30px;">Histórico de Consultas</h2>
-            <div id="historico-consultas" class="context-item" style="font-size: 0.9em;">
-                <p style="color: #717171;">Nenhuma consulta registrada.</p>
+            <div class="history-title">
+                <h2>Histórico</h2>
+                <button id="clear-history" class="btn-clear">Limpar</button>
             </div>
-        </div>
-        
-        <div class="main-chat-area">
-            <div class="chat-container">
+            <div id="history-list" class="history-list"></div>
+        </aside>
+
+        <main>
+            <div class="chat-wrapper">
                 <header>
-                    <img src="https://parceiros.ifood.com.br/images/ifood-logo.svg" alt="Logotipo iFood" class="ifood-logo-img">
-                    <h1>Agente Suporte Interno</h1>
+                    <div class="header-left">
+                        <button id="open-sidebar" class="menu-toggle">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                        </button>
+                        <img src="https://parceiros.ifood.com.br/images/ifood-logo.svg" alt="iFood" class="logo" onerror="this.src='https://placehold.co/100x32/EA1D2C/ffffff?text=iFood'">
+                        <h1>Suporte Interno</h1>
+                        <div class="badge"><span class="dot"></span><span>Online</span></div>
+                    </div>
+                    <button id="theme-btn" class="theme-btn" title="Alternar tema">
+                        <svg id="theme-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
                 </header>
-                
-                <div id="chat-box" class="chat-box">
-                    <!-- Mensagens do chat entram aqui via JS -->
-                </div>
-                
-                <form id="query-form" class="input-area">
-                    <input type="text" id="user-input" placeholder="Qual sua dúvida operacional? (Ex: Como funciona o estorno parcial?)" required>
-                    <button type="submit">Consultar</button>
+
+                <div id="chat-box" class="chat-box"></div>
+
+                <form id="chat-form">
+                    <div id="attachment-bar" class="attachment-preview-bar">
+                        <img id="preview-thumb" src="" alt="Anexo">
+                        <span id="preview-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;"></span>
+                        <button type="button" id="remove-attach" class="remove-attachment">✕</button>
+                    </div>
+                    <div class="input-group">
+                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                        <button type="button" id="attach-btn" class="attach-btn" title="Enviar print ou imagem">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                        </button>
+                        <input type="text" id="user-input" placeholder="Digite sua dúvida operacional ou envie um print..." autocomplete="off">
+                        <button type="submit">Consultar</button>
+                    </div>
+                    <div class="input-hint">
+                        <span>Pressione <strong>Enter</strong> para enviar</span>
+                        <span>v2.6 com Anexos</span>
+                    </div>
                 </form>
             </div>
-        </div>
-        
+        </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const $ = (id) => document.getElementById(id);
+            const chatBox = $('chat-box');
+            const chatForm = $('chat-form');
+            const userInput = $('user-input');
+            const fileInput = $('file-input');
+            const attachBtn = $('attach-btn');
+            const attachmentBar = $('attachment-bar');
+            const previewThumb = $('preview-thumb');
+            const previewName = $('preview-name');
+            const removeAttach = $('remove-attach');
+            const historyList = $('history-list');
+            const sidebar = $('sidebar');
+            const overlay = $('overlay');
+
+            let activeId = null;
+            let currentAttachment = null;
+
+            let history = JSON.parse(localStorage.getItem('ifood_history')) || [
+                { id: 1, query: "Como realizar estorno parcial de pedido?", answer: "Acesse Portal da Operação > <b>Ações do Pedido</b> > <b>Reembolso Parcial</b>. Selecione os itens divergentes e confirme.", time: "10:14" },
+                { id: 2, query: "Tolerância de atraso do entregador?", answer: "A tolerância padrão é de <b>15 minutos</b> após a previsão máxima dada ao cliente.", time: "09:45" }
+            ];
+
+            // Theme Toggle
+            const updateThemeIcon = (isDark) => {
+                const icon = $('theme-icon');
+                if (isDark) {
+                    // Sun icon (Lucide)
+                    icon.innerHTML = '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>';
+                } else {
+                    // Moon icon (Lucide)
+                    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+                }
+            };
+
+            if (localStorage.getItem('ifood_theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                updateThemeIcon(true);
+            } else {
+                updateThemeIcon(false);
+            }
+
+            $('theme-btn').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('ifood_theme', isDark ? 'dark' : 'light');
+                updateThemeIcon(isDark);
+            });
+
+            // Mobile Sidebar Control
+            const toggleSidebar = (open) => {
+                sidebar.classList.toggle('open', open);
+                overlay.classList.toggle('active', open);
+            };
+            $('open-sidebar').addEventListener('click', () => toggleSidebar(true));
+            $('close-sidebar').addEventListener('click', () => toggleSidebar(false));
+            overlay.addEventListener('click', () => toggleSidebar(false));
+
+            // File Attachment Handling
+            attachBtn.addEventListener('click', () => fileInput.click());
+
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (uploadEvent) => {
+                    currentAttachment = {
+                        name: file.name,
+                        dataUrl: uploadEvent.target.result
+                    };
+                    previewThumb.src = currentAttachment.dataUrl;
+                    previewName.textContent = file.name;
+                    attachmentBar.style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
+            });
+
+            removeAttach.addEventListener('click', () => {
+                currentAttachment = null;
+                fileInput.value = '';
+                attachmentBar.style.display = 'none';
+            });
+
+            // Knowledge Base Simulator
+            const kb = [
+                { keys: ['estorno', 'reembolso', 'devolver', 'cancelar'], ans: "Para tratar cancelamentos e estornos no pedido #34529013-XYZ:<br><br>1. <b>Estorno Total</b>: Via Ações Rápidas se não entregue.<br>2. <b>Estorno Parcial</b>: Informe os itens afetados.<br><br><span class='tag'>Regra iFood</span> Valores acima de R$ 150 necessitam de supervisão." },
+                { keys: ['atraso', 'entregador', 'demora', 'moto'], ans: "Logística atual: O entregador está na rota principal, estimado em <b>8 minutos</b>.<br>Se ultrapassar 15 min do SLA, você pode disparar reatribuição." },
+                { keys: ['cupom', 'desconto', 'voucher'], ans: "Para cupons de retenção (Foodlover Prata): Limite padrão de até <b>R$ 20,00</b> sem aprovação prévia na aba de vouchers." }
+            ];
+
+            const getAnswer = (q, hasImage) => {
+                if (hasImage) {
+                    return "Recebi o print anexado do erro. Analisando a imagem com o sistema central...<br><br>Identificado: <b>Divergência de código SKU na etiqueta do parceiro</b>. Recomendo reetiquetar o pacote e notificar o suporte logístico se persistir.";
+                }
+                const lower = q.toLowerCase();
+                const match = kb.find(item => item.keys.some(k => lower.includes(k)));
+                return match ? match.ans : "Para este cenário com o pedido <b>#34529013-XYZ</b>, consulte os dados no painel central de parceiros ou abra um chamado avançado.";
+            };
+
+            const getTime = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const renderInitial = () => {
+                chatBox.innerHTML = `
+                    <div class="msg-row assistant">
+                        <div class="bubble">
+                            <div class="ai-label">Assistente iFood IA</div>
+                            <div class="content"><p>Olá! Estou pronto para auxiliar no atendimento ao pedido <strong>#34529013-XYZ</strong>. Você também pode enviar prints ou fotos de erros.</p></div>
+                            <div class="chips">
+                                <button class="chip" onclick="quickAsk('Como funciona o estorno parcial?')">Estorno Parcial</button>
+                                <button class="chip" onclick="quickAsk('Como tratar atraso de entregador?')">Atraso Entregador</button>
+                                <button class="chip" onclick="quickAsk('Regras de voucher')">Vouchers & Cupons</button>
+                            </div>
+                            <span class="msg-time">${getTime()}</span>
+                        </div>
+                    </div>`;
+            };
+
+            window.quickAsk = (text) => {
+                userInput.value = text;
+                chatForm.dispatchEvent(new Event('submit'));
+            };
+
+            const renderHistory = () => {
+                if (!history.length) {
+                    historyList.innerHTML = `<div class="empty-history">Nenhum histórico recente</div>`;
+                    return;
+                }
+                historyList.innerHTML = history.map(item => `
+                    <button class="history-item ${activeId === item.id ? 'active' : ''}" onclick="loadHistory(${item.id})">
+                        <div class="history-item-title">${item.query}</div>
+                        <div class="history-item-time">${item.time}</div>
+                    </button>
+                `).join('');
+            };
+
+            window.loadHistory = (id) => {
+                const item = history.find(h => h.id === id);
+                if (!item) return;
+                activeId = id;
+                renderHistory();
+                
+                let imgHtml = item.img ? `<img src="${item.img}" class="chat-img" alt="Print anexado">` : '';
+                chatBox.innerHTML = `
+                    <div class="msg-row user"><div class="bubble"><div>${item.query}</div>${imgHtml}<span class="msg-time">${item.time}</span></div></div>
+                    <div class="msg-row assistant"><div class="bubble"><div class="ai-label">Assistente iFood IA</div><div class="content">${item.answer}</div><span class="msg-time">${item.time}</span></div></div>
+                `;
+                if (window.innerWidth <= 868) toggleSidebar(false);
+            };
+
+            chatForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const text = userInput.value.trim();
+                const attached = currentAttachment;
+
+                if (!text && !attached) return;
+
+                // Clear input and attachments immediately
+                userInput.value = '';
+                currentAttachment = null;
+                attachmentBar.style.display = 'none';
+                fileInput.value = '';
+                userInput.blur();
+
+                const queryText = text || "Envio de print de erro operacional";
+                const imgHtml = attached ? `<img src="${attached.dataUrl}" class="chat-img" alt="Print anexado">` : '';
+
+                // Append user msg
+                chatBox.insertAdjacentHTML('beforeend', `
+                    <div class="msg-row user">
+                        <div class="bubble">
+                            <div>${queryText}</div>
+                            ${imgHtml}
+                            <span class="msg-time">${getTime()}</span>
+                        </div>
+                    </div>
+                `);
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                // Typing indicator
+                chatBox.insertAdjacentHTML('beforeend', `<div id="loading" class="msg-row assistant"><div class="typing"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`);
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                setTimeout(() => {
+                    document.getElementById('loading')?.remove();
+                    const ans = getAnswer(text, !!attached);
+                    const time = getTime();
+
+                    chatBox.insertAdjacentHTML('beforeend', `
+                        <div class="msg-row assistant">
+                            <div class="bubble">
+                                <div class="ai-label">Assistente iFood IA</div>
+                                <div class="content">${ans}</div>
+                                <span class="msg-time">${time}</span>
+                            </div>
+                        </div>
+                    `);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+
+                    history.unshift({ id: Date.now(), query: queryText, answer: ans, time, img: attached ? attached.dataUrl : null });
+                    if (history.length > 15) history.pop();
+                    localStorage.setItem('ifood_history', JSON.stringify(history));
+                    activeId = history[0].id;
+                    renderHistory();
+                }, 900);
+            });
+
+            $('clear-history').addEventListener('click', () => {
+                history = [];
+                activeId = null;
+                localStorage.removeItem('ifood_history');
+                renderHistory();
+                renderInitial();
+            });
+
+            renderInitial();
+            renderHistory();
+        });
+    </script>
 </body>
 </html>
